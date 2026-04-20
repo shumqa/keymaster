@@ -347,6 +347,102 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
   .form-layout{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
 }
+
+/* ===== КАТАЛОГ ===== */
+#cat-overlay{
+  display:none;position:fixed;inset:0;z-index:10500;
+  background:rgba(0,0,0,0.82);align-items:flex-start;
+  justify-content:center;backdrop-filter:blur(4px);
+  overflow-y:auto;padding:20px 16px 40px;
+}
+#cat-overlay.open{display:flex}
+#cat-modal{
+  background:var(--s1);width:100%;max-width:960px;
+  border:1px solid rgba(0,0,0,0.08);
+  margin:auto;position:relative;
+  box-shadow:0 8px 48px rgba(0,0,0,0.18);
+}
+body.dark #cat-modal{border-color:rgba(255,255,255,0.06)}
+#cat-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 28px;
+  border-bottom:2px solid var(--r);
+  background:var(--bg);
+}
+#cat-title{font-family:'Anton',sans-serif;font-size:22px;letter-spacing:2px;color:var(--wt)}
+#cat-subtitle{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mt);margin-top:2px}
+#cat-close{
+  width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1px solid rgba(128,128,128,0.3);
+  color:var(--mt);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s;flex-shrink:0;
+}
+#cat-close:hover{border-color:var(--r);color:var(--wt)}
+#cat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1px;background:rgba(0,0,0,0.06);
+  padding:0;
+}
+body.dark #cat-grid{background:rgba(255,255,255,0.04)}
+.cat-item{
+  background:var(--s1);padding:0;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:background .15s;
+}
+.cat-item:hover{background:var(--s2)}
+.cat-img-wrap{
+  width:100%;aspect-ratio:1/1;overflow:hidden;
+  background:var(--g1);position:relative;
+}
+.cat-img-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;transition:transform .3s;
+}
+.cat-item:hover .cat-img-wrap img{transform:scale(1.04)}
+.cat-img-placeholder{
+  width:100%;height:100%;display:flex;
+  align-items:center;justify-content:center;
+  font-size:40px;background:var(--g1);
+}
+.cat-info{padding:14px 16px 16px;}
+.cat-name{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--wt);margin-bottom:4px;
+}
+.cat-desc{font-size:11px;color:var(--mt);line-height:1.6;margin-bottom:8px;}
+.cat-price{
+  font-family:'Anton',sans-serif;font-size:18px;letter-spacing:1px;
+  color:var(--r);
+}
+.cat-badge{
+  display:inline-block;font-family:'IBM Plex Mono',monospace;
+  font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:3px 7px;margin-bottom:8px;
+}
+.cat-badge.instock{background:rgba(76,175,80,0.15);color:#4caf50;border:1px solid rgba(76,175,80,0.3)}
+.cat-badge.order{background:rgba(255,152,0,0.12);color:#ff9800;border:1px solid rgba(255,152,0,0.3)}
+#cat-empty{
+  padding:48px;text-align:center;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;
+  letter-spacing:2px;color:var(--mt);text-transform:uppercase;
+}
+#cat-footer{
+  padding:16px 28px;border-top:1px solid rgba(0,0,0,0.08);
+  background:var(--bg);
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  letter-spacing:2px;color:var(--mt);text-transform:uppercase;
+}
+body.dark #cat-footer,body.dark #cat-header{background:var(--s1)}
+body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
+@media(max-width:600px){
+  #cat-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  #cat-header{padding:16px 20px}
+  #cat-footer{padding:12px 20px}
+}
+
 @media(max-width:600px){
   nav{padding:0 20px}
   .nlinks{display:none}
@@ -461,7 +557,7 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
     </div>
 
     <div class="keys-grid">
-      <div class="key-card">
+      <div class="key-card" onclick="openCatalog('auto')" style="cursor:pointer;">
         <span class="key-ico">🚗</span>
         <div class="key-t">АВТО­МОБИЛЬНЫЕ</div>
         <p class="key-d">Дубликаты, чип-ключи, смарт-ключи для всех марок. Программирование иммобилайзера. Утерянные ключи по замку.</p>
@@ -472,8 +568,9 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
           <span class="key-tag">Чип</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
-      <div class="key-card">
+      <div class="key-card" onclick="openCatalog('home')" style="cursor:pointer;">
         <span class="key-ico">🏠</span>
         <div class="key-t">ДОМАШНИЕ</div>
         <p class="key-d">Дубликаты ключей к любым замкам: входные двери, гаражи, подвалы, сейфы, почтовые ящики.</p>
@@ -484,8 +581,9 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
           <span class="key-tag">Ящик</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
-      <div class="key-card">
+      <div class="key-card" onclick="openCatalog('dom')" style="cursor:pointer;">
         <span class="key-ico">📟</span>
         <div class="key-t">ДОМОФОНЫ</div>
         <p class="key-d">Копирование ключей-таблеток, магнитных карт и RFID-брелоков для домофонов и систем контроля доступа.</p>
@@ -496,8 +594,9 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
           <span class="key-tag">Брелок</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
-      <div class="key-card">
+      <div class="key-card" onclick="openCatalog('boat')" style="cursor:pointer;">
         <span class="key-ico">⛵</span>
         <div class="key-t">КАТЕРА И ЯХТЫ</div>
         <p class="key-d">Изготовление ключей для лодочных моторов, катеров и яхт. Работаем с Yamaha, Mercury, Honda и другими.</p>
@@ -508,8 +607,9 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
           <span class="key-tag">Все марки</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
-      <div class="key-card">
+      <div class="key-card" onclick="openCatalog('moto')" style="cursor:pointer;">
         <span class="key-ico">🏍️</span>
         <div class="key-t">МОТО­ЦИКЛЫ И СКУТЕРЫ</div>
         <p class="key-d">Дубликаты и утерянные ключи для любых мотоциклов и скутеров. Программирование иммобилайзеров.</p>
@@ -520,8 +620,9 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
           <span class="key-tag">ATV</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
-      <div class="key-card">
+      <div class="key-card" onclick="openCatalog('spec')" style="cursor:pointer;">
         <span class="key-ico">🚜</span>
         <div class="key-t">СПЕЦ. ТЕХНИКА</div>
         <p class="key-d">Ключи для тракторов, экскаваторов, погрузчиков и другой спецтехники. Выезд на объект.</p>
@@ -531,6 +632,7 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
           <span class="key-tag">Погрузчик</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
     </div>
 
@@ -689,7 +791,7 @@ footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
         <h4>Контакты</h4>
         <p>г. Самара, ул. Виталия Талабаева, 6</p>
         <p>+7 (987) 444-98-48</p>
-        <p>keymastersmr@yandex.ru</p>
+        <p>info@masterkluchey.ru</p>
         <div style="display:flex;gap:10px;margin-top:14px;align-items:center;">
           <a href="YOUR_VK_GROUP_LINK_HERE" target="_blank" rel="noopener" title="ВКонтакте" style="display:block;width:36px;height:36px;border-radius:50%;overflow:hidden;filter:grayscale(100%) brightness(0.9);transition:filter .2s,transform .2s;flex-shrink:0;" onmouseover="this.style.filter='grayscale(100%) brightness(1.3)';this.style.transform='scale(1.1)'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)';this.style.transform='scale(1)'">
             <img src="data:image/png;base64,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" alt="VK" style="width:36px;height:36px;object-fit:cover;display:block;border-radius:50%;">
@@ -811,6 +913,21 @@ if(ph){
   });
 }
 </script>
+
+<!-- ===== КАТАЛОГ ===== -->
+<div id="cat-overlay">
+  <div id="cat-modal">
+    <div id="cat-header">
+      <div>
+        <div id="cat-title">КАТАЛОГ</div>
+        <div id="cat-subtitle" id="cat-subtitle-txt"></div>
+      </div>
+      <button id="cat-close" onclick="closeCatalog()">✕</button>
+    </div>
+    <div id="cat-grid"></div>
+    <div id="cat-footer">📞 Уточнить наличие: +7 (987) 444-98-48 · Цены указаны ориентировочно</div>
+  </div>
+</div>
 
 <!-- VK BUTTON -->
 <a href="YOUR_VK_GROUP_LINK_HERE" target="_blank" rel="noopener" title="Мы ВКонтакте" style="
@@ -1299,6 +1416,144 @@ function applyPromo(){
   document.getElementById('wheel-promo-input').value='';
 }
 document.getElementById('wheel-promo-input').addEventListener('keydown',function(e){if(e.key==='Enter')applyPromo();});
+</script>
+
+<script>
+/*
+ * ================================================================
+ *   КАТАЛОГ КЛЮЧЕЙ — БАЗА ДАННЫХ
+ *   ----------------------------------------------------------------
+ *   Чтобы добавить новый товар — скопируй блок { ... } и заполни:
+ *     name    — название позиции
+ *     desc    — краткое описание
+ *     price   — цена (строка, например "от 500 ₽")
+ *     img     — URL фотографии (можно загрузить своё фото на imgur.com
+ *               и вставить ссылку, или указать путь к локальному файлу)
+ *     status  — "instock" (в наличии) | "order" (под заказ)
+ *   Чтобы убрать товар — удели его блок.
+ * ================================================================
+ */
+var CATALOG = {
+
+  /* ---- АВТОМОБИЛЬНЫЕ ---- */
+  auto: {
+    title: 'АВТОМОБИЛЬНЫЕ КЛЮЧИ',
+    subtitle: 'Дубликаты, чип-ключи, смарт-ключи для всех марок',
+    items: [
+      { name:'Чип-ключ универсальный', desc:'Программирование под марку авто. Подходит для большинства иномарок.', price:'от 800 ₽', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', status:'instock' },
+      { name:'Смарт-ключ / кнопка', desc:'Бесключевой доступ, кнопка «Start/Stop». Программирование по VIN.', price:'от 2 500 ₽', img:'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&q=80', status:'instock' },
+      { name:'Дубликат механического ключа', desc:'Быстрое изготовление дубликата по образцу за 10 минут.', price:'от 300 ₽', img:'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=400&q=80', status:'instock' },
+      { name:'Выкидной ключ с чипом', desc:'Корпус + лезвие + программирование транспондера.', price:'от 1 200 ₽', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&q=80', status:'instock' },
+      { name:'Ключ по коду / утеря', desc:'Изготовление ключа без образца — по замку или VIN-номеру.', price:'от 1 500 ₽', img:'https://images.unsplash.com/photo-1633158829799-96bb13cab779?w=400&q=80', status:'instock' },
+      { name:'Программирование иммобилайзера', desc:'Прописка нового ключа в блок управления автомобиля.', price:'от 1 000 ₽', img:'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=400&q=80', status:'instock' },
+    ]
+  },
+
+  /* ---- ДОМАШНИЕ ---- */
+  home: {
+    title: 'ДОМАШНИЕ КЛЮЧИ',
+    subtitle: 'Дубликаты для входных дверей, гаражей, сейфов',
+    items: [
+      { name:'Дубликат английского ключа', desc:'Плоский ключ для замков английского типа. Быстро, точно.', price:'от 100 ₽', img:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80', status:'instock' },
+      { name:'Ключ для сейфа', desc:'Изготовление дубликата ключа к сейфу любого производителя.', price:'от 250 ₽', img:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80', status:'instock' },
+      { name:'Ключ для гаражного замка', desc:'Дубликаты для навесных, врезных и автоматических гаражных замков.', price:'от 150 ₽', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', status:'instock' },
+      { name:'Ключ для почтового ящика', desc:'Небольшой ключик для почтового или шкафного замка.', price:'от 80 ₽', img:'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=400&q=80', status:'instock' },
+      { name:'Ключ по замку (без образца)', desc:'Снимаем мерки непосредственно с замочной скважины.', price:'от 400 ₽', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&q=80', status:'order' },
+      { name:'Ключ для подвала / тех. помещения', desc:'Ключи нестандартных форм по образцу или по замку.', price:'от 200 ₽', img:'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&q=80', status:'instock' },
+    ]
+  },
+
+  /* ---- ДОМОФОНЫ ---- */
+  dom: {
+    title: 'ДОМОФОННЫЕ КЛЮЧИ И КАРТЫ',
+    subtitle: 'Копирование таблеток, магнитных карт, RFID-брелоков',
+    items: [
+      { name:'Ключ-таблетка (ТМ)', desc:'Копирование таблеток TouchMemory (Dallas) 64/1990/2004.', price:'от 200 ₽', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', status:'instock' },
+      { name:'Магнитная карта доступа', desc:'Дубликат карты для домофона, офиса, парковки.', price:'от 300 ₽', img:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80', status:'instock' },
+      { name:'RFID-брелок 125 кГц', desc:'Копирование брелоков EM-Marine (наиболее распространённый формат).', price:'от 250 ₽', img:'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=400&q=80', status:'instock' },
+      { name:'RFID-брелок 13,56 МГц', desc:'Копирование карт Mifare Classic 1K/4K, NTAG, Desfire (некоторые типы).', price:'от 400 ₽', img:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80', status:'order' },
+      { name:'Карта-брелок комбо', desc:'Универсальный дубликат — в виде тонкой карты или брелока.', price:'от 350 ₽', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&q=80', status:'instock' },
+    ]
+  },
+
+  /* ---- КАТЕРА И ЯХТЫ ---- */
+  boat: {
+    title: 'КЛЮЧИ ДЛЯ КАТЕРОВ И ЯХТ',
+    subtitle: 'Yamaha, Mercury, Honda, Suzuki и другие марки',
+    items: [
+      { name:'Ключ Yamaha (лодочный мотор)', desc:'Дубликат ключа зажигания для моторов Yamaha серий F/FT.', price:'от 600 ₽', img:'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&q=80', status:'instock' },
+      { name:'Ключ Mercury / Mariner', desc:'Ключи зажигания для моторов Mercury и Mariner всех серий.', price:'от 600 ₽', img:'https://images.unsplash.com/photo-1633158829799-96bb13cab779?w=400&q=80', status:'instock' },
+      { name:'Ключ Honda (BF серия)', desc:'Дубликат для лодочных моторов Honda BF5–BF250.', price:'от 600 ₽', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', status:'order' },
+      { name:'Универсальный ключ катера', desc:'Подбор и изготовление под образец или код. Большинство марок.', price:'от 500 ₽', img:'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=400&q=80', status:'instock' },
+    ]
+  },
+
+  /* ---- МОТОЦИКЛЫ ---- */
+  moto: {
+    title: 'КЛЮЧИ ДЛЯ МОТОЦИКЛОВ И СКУТЕРОВ',
+    subtitle: 'Honda, Yamaha, Suzuki, Kawasaki и другие',
+    items: [
+      { name:'Ключ Honda (мотоцикл)', desc:'Дубликат механического и транспондерного ключа Honda.', price:'от 400 ₽', img:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80', status:'instock' },
+      { name:'Ключ Yamaha (мото)', desc:'Дубликаты для мотоциклов и скутеров Yamaha.', price:'от 400 ₽', img:'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=400&q=80', status:'instock' },
+      { name:'Ключ Kawasaki / Suzuki', desc:'Изготовление по образцу или коду для большинства моделей.', price:'от 400 ₽', img:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80', status:'order' },
+      { name:'Ключ для скутера/мопеда', desc:'Простые ключи для китайских и японских скутеров. Быстрое изготовление.', price:'от 200 ₽', img:'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&q=80', status:'instock' },
+      { name:'Ключ ATV / квадроцикл', desc:'Дубликаты для квадроциклов и багги всех марок.', price:'от 450 ₽', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=400&q=80', status:'order' },
+    ]
+  },
+
+  /* ---- СПЕЦТЕХНИКА ---- */
+  spec: {
+    title: 'КЛЮЧИ ДЛЯ СПЕЦТЕХНИКИ',
+    subtitle: 'Тракторы, экскаваторы, погрузчики, строительная техника',
+    items: [
+      { name:'Ключ трактора МТЗ/ЮМЗ', desc:'Дубликат ключа зажигания для тракторов МТЗ, ЮМЗ, Т-40/150.', price:'от 300 ₽', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80', status:'instock' },
+      { name:'Ключ Caterpillar / JCB', desc:'Ключи зажигания для экскаваторов и погрузчиков CAT, JCB.', price:'от 500 ₽', img:'https://images.unsplash.com/photo-1633158829799-96bb13cab779?w=400&q=80', status:'instock' },
+      { name:'Ключ Komatsu / Hitachi', desc:'Дубликат для техники Komatsu и Hitachi по образцу или коду.', price:'от 500 ₽', img:'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=400&q=80', status:'order' },
+      { name:'Ключ для вилочного погрузчика', desc:'Ключи для Toyota, Hyster, Crown, Still и других марок.', price:'от 400 ₽', img:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80', status:'instock' },
+      { name:'Универсальный ключ спецтехники', desc:'Подбор по образцу. Выезд на объект по договорённости.', price:'от 350 ₽', img:'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=400&q=80', status:'instock' },
+    ]
+  },
+};
+/* ================================================================ */
+
+var _catOverlay = document.getElementById('cat-overlay');
+if(_catOverlay){_catOverlay.addEventListener('click',function(e){if(e.target===this)closeCatalog();});}
+
+function openCatalog(cat){
+  var data = CATALOG[cat];
+  if(!data) return;
+  document.getElementById('cat-title').textContent = data.title;
+  var sub = document.getElementById('cat-subtitle');
+  if(sub) sub.textContent = data.subtitle;
+  var grid = document.getElementById('cat-grid');
+  grid.innerHTML = '';
+  if(!data.items || data.items.length === 0){
+    grid.innerHTML = '<div id="cat-empty">Каталог пока пополняется</div>';
+  } else {
+    data.items.forEach(function(item){
+      var badge = item.status === 'instock'
+        ? '<span class="cat-badge instock">В наличии</span>'
+        : '<span class="cat-badge order">Под заказ</span>';
+      var imgHtml = item.img
+        ? '<img src="' + item.img + '" alt="' + item.name + '" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'cat-img-placeholder\\'>' + (cat==='auto'?'🚗':cat==='home'?'🏠':cat==='dom'?'📟':cat==='boat'?'⛵':cat==='moto'?'🏍️':'🚜') + '</div>'">'
+        : '<div class="cat-img-placeholder">' + (cat==='auto'?'🚗':cat==='home'?'🏠':cat==='dom'?'📟':cat==='boat'?'⛵':cat==='moto'?'🏍️':'🚜') + '</div>';
+      grid.innerHTML += '<div class="cat-item">'
+        + '<div class="cat-img-wrap">' + imgHtml + '</div>'
+        + '<div class="cat-info">'
+        + badge
+        + '<div class="cat-name">' + item.name + '</div>'
+        + '<div class="cat-desc">' + item.desc + '</div>'
+        + '<div class="cat-price">' + item.price + '</div>'
+        + '</div></div>';
+    });
+  }
+  document.getElementById('cat-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCatalog(){
+  document.getElementById('cat-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 </script>
 
 </body>
