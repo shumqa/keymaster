@@ -125,6 +125,18 @@ body.dark nav{background:rgba(5,5,5,0.97)!important}
 }
 .hero-h1 .stroke{-webkit-text-stroke:2px var(--r);color:transparent}
 .hero-h1 .fill{color:var(--r)}
+.hero-city{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-bottom:20px;margin-top:-4px;
+}
+.hero-city-dot{font-size:13px;line-height:1;}
+.hero-city-text{
+  font-family:var(--fm);font-size:11px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--mt);
+  border-bottom:1px solid rgba(128,128,128,0.3);
+  padding-bottom:1px;
+}
 .hero-sub{
   font-size:14px;color:var(--mt);line-height:1.8;max-width:480px;
   margin:24px 0 36px;border-left:2px solid var(--r);padding-left:16px;
@@ -489,6 +501,10 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
         <span class="stroke">МАСТЕР</span><br>
         <span class="fill">КЛЮЧЕЙ</span>
       </h1>
+      <div class="hero-city">
+        <span class="hero-city-dot">📍</span>
+        <span class="hero-city-text">Самара</span>
+      </div>
       <p class="hero-sub">Авто, дом, домофон, катер, мотоцикл — любые ключи за 15 минут. Диагностика и вскрытие замков на месте.</p>
       <div class="hero-phone">
         <div class="hero-phone-dot"></div>
