@@ -1527,24 +1527,19 @@ function openCatalog(cat){
   if(sub) sub.textContent = data.subtitle;
   var grid = document.getElementById('cat-grid');
   grid.innerHTML = '';
+  var icos = {auto:'🚗',home:'🏠',dom:'📟',boat:'⛵',moto:'🏍️',spec:'🚜'};
+  var ico = icos[cat] || '🔑';
   if(!data.items || data.items.length === 0){
     grid.innerHTML = '<div id="cat-empty">Каталог пока пополняется</div>';
   } else {
-    data.items.forEach(function(item){
-      var badge = item.status === 'instock'
+    data.items.forEach(function(it){
+      var badge = it.status === 'instock'
         ? '<span class="cat-badge instock">В наличии</span>'
         : '<span class="cat-badge order">Под заказ</span>';
-      var imgHtml = item.img
-        ? '<img src="' + item.img + '" alt="' + item.name + '" loading="lazy" onerror="this.parentNode.innerHTML='<div class=\\'cat-img-placeholder\\'>' + (cat==='auto'?'🚗':cat==='home'?'🏠':cat==='dom'?'📟':cat==='boat'?'⛵':cat==='moto'?'🏍️':'🚜') + '</div>'">'
-        : '<div class="cat-img-placeholder">' + (cat==='auto'?'🚗':cat==='home'?'🏠':cat==='dom'?'📟':cat==='boat'?'⛵':cat==='moto'?'🏍️':'🚜') + '</div>';
-      grid.innerHTML += '<div class="cat-item">'
-        + '<div class="cat-img-wrap">' + imgHtml + '</div>'
-        + '<div class="cat-info">'
-        + badge
-        + '<div class="cat-name">' + item.name + '</div>'
-        + '<div class="cat-desc">' + item.desc + '</div>'
-        + '<div class="cat-price">' + item.price + '</div>'
-        + '</div></div>';
+      var imgPart = it.img
+        ? '<img src="' + it.img + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">'
+        : '<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:40px;">' + ico + '</div>';
+      grid.innerHTML += '<div class="cat-item"><div class="cat-img-wrap">' + imgPart + '</div><div class="cat-info">' + badge + '<div class="cat-name">' + it.name + '</div><div class="cat-desc">' + it.desc + '</div><div class="cat-price">' + it.price + '</div></div></div>';
     });
   }
   document.getElementById('cat-overlay').classList.add('open');
