@@ -1099,6 +1099,7 @@ var PROMO_ADMIN = 'ADMINPROMO9';
 var N = WHEEL_PRIZES.length;
 var SEG = (2*Math.PI)/N;
 var spinning = false;
+var hasSpun = false; /* in-memory guard — сбрасывается только при перезагрузке страницы */
 var currentAngle = 0;
 var keyImg = null;
 var lastWinner = null;
@@ -1129,21 +1130,19 @@ function drawKeyPointer(){
   if(!pc||!keyImg) return;
   var ctx = pc.getContext('2d');
   ctx.clearRect(0,0,pc.width,pc.height);
-  ctx.save();
-  ctx.translate(pc.width/2, pc.height/2);
-  ctx.rotate(Math.PI);
-  ctx.drawImage(keyImg, -pc.width/2, -pc.height/2, pc.width, pc.height);
-  ctx.restore();
+  ctx.drawImage(keyImg, 0, 0, pc.width, pc.height);
 }
 
 /* --- localStorage helpers --- */
 function canSpin(){
-  if(localStorage.getItem('wheel_admin')==='1') return true;
-  if(localStorage.getItem('wheel_spun')!=='1') return true;
-  if(localStorage.getItem('wheel_extra')==='1' && localStorage.getItem('wheel_extra_used')!=='1') return true;
+  if(localStorage.getItem('wheel_admin')==='1') return true; /* безлимит для админа */
+  if(hasSpun) return false;            /* уже крутил в этой сессии */
+  if(localStorage.getItem('wheel_spun')!=='1') return true;  /* первый раз */
+  if(localStorage.getItem('wheel_extra')==='1' && localStorage.getItem('wheel_extra_used')!=='1') return true; /* промокод */
   return false;
 }
 function recordSpin(){
+  hasSpun = true; /* блокируем в памяти сразу */
   if(localStorage.getItem('wheel_admin')==='1') return;
   if(localStorage.getItem('wheel_spun')!=='1'){
     localStorage.setItem('wheel_spun','1');
@@ -1224,6 +1223,7 @@ function genCode(){
 function spinWheel(){
   if(spinning||!canSpin()) return;
   spinning=true;
+  if(localStorage.getItem('wheel_admin')!=='1') hasSpun=true; /* блокируем немедленно */
   document.getElementById('wheel-spin-btn').disabled=true;
   document.getElementById('wheel-result').textContent='';
   document.getElementById('wheel-result-sub').textContent='';
