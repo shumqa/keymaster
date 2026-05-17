@@ -72,6 +72,13 @@ body.dark .theme-toggle .icon-sun{display:none}
 body.dark .theme-toggle .icon-moon{display:block}
 
 html{scroll-behavior:smooth}
+
+/* ── ABSTRACT BACKGROUND ── */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;
+}
+body > *:not(#bg-canvas){position:relative;z-index:1;}
 body{background:var(--bg);color:var(--wt);font-family:var(--fb);overflow-x:hidden}
 
 nav{
@@ -472,6 +479,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
 </head>
 <body>
 
+<canvas id="bg-canvas"></canvas>
 <!-- NAV -->
 <nav>
   <div class="nlogo">
@@ -982,6 +990,148 @@ function toggleTheme(){
 })();
 </script>
 
+
+
+<script>
+/* ═══════════════════════════════════════════════
+   АБСТРАКТНЫЙ ФОНОВЫЙ ПАТТЕРН
+   Тонкая анимация: плавающие линии + hexGrid
+═══════════════════════════════════════════════ */
+(function(){
+  var canvas = document.getElementById('bg-canvas');
+  var ctx = canvas.getContext('2d');
+  var W, H, isDark;
+  var lines = [];
+  var dots  = [];
+  var RAF;
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  /* — Генерация линий — */
+  function makeLines(){
+    lines = [];
+    var count = Math.floor(W / 120) + 4;
+    for(var i = 0; i < count; i++){
+      lines.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        angle: Math.random() * Math.PI * 2,
+        speed: 0.12 + Math.random() * 0.18,
+        len:   60  + Math.random() * 140,
+        alpha: 0.03 + Math.random() * 0.05,
+        thick: 0.5 + Math.random() * 1,
+        da:    (Math.random() - 0.5) * 0.003,
+      });
+    }
+  }
+
+  /* — Генерация точек-узлов — */
+  function makeDots(){
+    dots = [];
+    var count = Math.floor((W * H) / 28000);
+    for(var i = 0; i < count; i++){
+      dots.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 1 + Math.random() * 2,
+        alpha: 0.04 + Math.random() * 0.08,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
+      });
+    }
+  }
+
+  makeLines(); makeDots();
+
+  function draw(){
+    isDark = document.body.classList.contains('dark');
+    var accent  = isDark ? '224,16,16'   : '200,0,0';
+    var neutral = isDark ? '255,255,255' : '0,0,0';
+
+    ctx.clearRect(0, 0, W, H);
+
+    /* Hex-grid (статичная, очень лёгкая) */
+    var hex = 60;
+    var hh  = hex * Math.sqrt(3) / 2;
+    ctx.strokeStyle = 'rgba(' + neutral + ','+ (isDark ? '0.025' : '0.04') +')';
+    ctx.lineWidth = 0.5;
+    for(var row = -1; row < H / hh + 2; row++){
+      for(var col = -1; col < W / (hex * 1.5) + 2; col++){
+        var cx = col * hex * 1.5;
+        var cy = row * hh * 2 + (col % 2 === 0 ? 0 : hh);
+        ctx.beginPath();
+        for(var k = 0; k < 6; k++){
+          var ang = Math.PI / 180 * (60 * k - 30);
+          var px  = cx + hex * 0.95 * Math.cos(ang);
+          var py  = cy + hex * 0.95 * Math.sin(ang);
+          k === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+    }
+
+    /* Плавающие линии */
+    for(var i = 0; i < lines.length; i++){
+      var l = lines[i];
+      l.x += Math.cos(l.angle) * l.speed;
+      l.y += Math.sin(l.angle) * l.speed;
+      l.angle += l.da;
+      /* wrap */
+      if(l.x < -200) l.x = W + 100;
+      if(l.x > W+200) l.x = -100;
+      if(l.y < -200) l.y = H + 100;
+      if(l.y > H+200) l.y = -100;
+
+      /* чередуем цвет: каждая 5-я — красная */
+      var col2 = (i % 5 === 0) ? accent : neutral;
+      ctx.strokeStyle = 'rgba(' + col2 + ',' + l.alpha + ')';
+      ctx.lineWidth   = l.thick;
+      ctx.beginPath();
+      ctx.moveTo(l.x, l.y);
+      ctx.lineTo(
+        l.x + Math.cos(l.angle) * l.len,
+        l.y + Math.sin(l.angle) * l.len
+      );
+      ctx.stroke();
+    }
+
+    /* Точки */
+    for(var j = 0; j < dots.length; j++){
+      var d = dots[j];
+      d.x += d.vx; d.y += d.vy;
+      if(d.x < 0) d.x = W; if(d.x > W) d.x = 0;
+      if(d.y < 0) d.y = H; if(d.y > H) d.y = 0;
+      /* соединяем близкие точки */
+      for(var k2 = j+1; k2 < dots.length; k2++){
+        var d2 = dots[k2];
+        var dist = Math.hypot(d.x-d2.x, d.y-d2.y);
+        if(dist < 120){
+          ctx.strokeStyle = 'rgba('+ accent +','+ (0.06 * (1 - dist/120)) +')';
+          ctx.lineWidth   = 0.6;
+          ctx.beginPath();
+          ctx.moveTo(d.x, d.y);
+          ctx.lineTo(d2.x, d2.y);
+          ctx.stroke();
+        }
+      }
+      ctx.fillStyle = 'rgba('+ (j%4===0 ? accent : neutral) +','+ d.alpha +')';
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    RAF = requestAnimationFrame(draw);
+  }
+
+  draw();
+})();
+</script>
 
 </body>
 </html>
