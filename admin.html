@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админ-панель — МастерКлючей</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --r:#E01010;--r2:#B50000;
+  --bg:#0A0A0A;--s1:#111;--s2:#1A1A1A;--s3:#222;
+  --border:rgba(255,255,255,0.07);
+  --mt:#666;--wt:#F0F0F0;
+  --green:#2ecc71;--orange:#f39c12;--red:#e74c3c;--blue:#3498db;
+  --fm:'IBM Plex Mono',monospace;--fb:'Inter',sans-serif;
+}
+html{height:100%;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--wt);font-family:var(--fb);min-height:100vh;font-size:14px;}
+
+/* ── LOGIN ── */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;background:var(--bg);
+  background-image:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(224,16,16,0.02) 40px,rgba(224,16,16,0.02) 41px);
+}
+.login-box{
+  width:360px;padding:40px 36px;
+  background:var(--s1);border:1px solid var(--border);
+  border-top:3px solid var(--r);
+}
+.login-logo{font-family:var(--fm);font-size:20px;font-weight:700;letter-spacing:3px;color:var(--wt);margin-bottom:4px;}
+.login-logo span{color:var(--r);}
+.login-sub{font-family:var(--fm);font-size:9px;letter-spacing:3px;color:var(--mt);text-transform:uppercase;margin-bottom:32px;}
+.login-label{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mt);display:block;margin-bottom:7px;}
+.login-input{
+  width:100%;background:var(--s2);border:1px solid var(--border);
+  border-bottom:1px solid rgba(255,255,255,0.15);
+  color:var(--wt);padding:12px 14px;font-family:var(--fm);font-size:13px;
+  outline:none;transition:border-color .2s;margin-bottom:16px;
+}
+.login-input:focus{border-color:var(--r);}
+.login-btn{
+  width:100%;background:var(--r);color:#fff;border:none;
+  padding:13px;font-family:var(--fm);font-size:12px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;cursor:pointer;
+  transition:background .15s;
+}
+.login-btn:hover{background:var(--r2);}
+.login-err{font-family:var(--fm);font-size:10px;color:var(--r);letter-spacing:1px;margin-top:10px;text-align:center;min-height:14px;}
+
+/* ── APP ── */
+#app{display:none;min-height:100vh;flex-direction:column;}
+
+/* TOPBAR */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;
+  background:var(--s1);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.topbar-logo{font-family:var(--fm);font-size:15px;font-weight:700;letter-spacing:2px;}
+.topbar-logo span{color:var(--r);}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-tag{font-family:var(--fm);font-size:9px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;}
+.topbar-logout{
+  font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--mt);background:transparent;border:1px solid var(--border);
+  padding:6px 12px;cursor:pointer;transition:border-color .2s,color .2s;
+}
+.topbar-logout:hover{border-color:var(--r);color:var(--r);}
+
+/* STATS ROW */
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--border);border-bottom:1px solid var(--border);
+}
+.stat-card{
+  background:var(--s1);padding:20px 24px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.stat-val{font-family:var(--fm);font-size:28px;font-weight:700;color:var(--wt);line-height:1;}
+.stat-val.green{color:var(--green);}
+.stat-val.orange{color:var(--orange);}
+.stat-val.red-col{color:var(--red);}
+.stat-lbl{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mt);}
+
+/* TOOLBAR */
+.toolbar{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 28px;background:var(--s2);
+  border-bottom:1px solid var(--border);flex-wrap:wrap;
+}
+.search-wrap{position:relative;flex:1;min-width:200px;}
+.search-wrap input{
+  width:100%;background:var(--s1);border:1px solid var(--border);
+  color:var(--wt);padding:9px 14px 9px 36px;font-family:var(--fm);
+  font-size:11px;letter-spacing:1px;outline:none;transition:border-color .2s;
+}
+.search-wrap input:focus{border-color:var(--r);}
+.search-wrap input::placeholder{color:var(--mt);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mt);font-size:13px;}
+.filter-btn{
+  font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:9px 14px;border:1px solid var(--border);background:transparent;color:var(--mt);
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.filter-btn:hover,.filter-btn.active{border-color:var(--r);color:var(--wt);background:rgba(224,16,16,0.1);}
+.csv-btn{
+  font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:9px 16px;border:none;background:var(--r);color:#fff;
+  cursor:pointer;transition:background .15s;white-space:nowrap;
+}
+.csv-btn:hover{background:var(--r2);}
+.refresh-btn{
+  font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:9px 14px;border:1px solid var(--border);background:transparent;color:var(--mt);
+  cursor:pointer;transition:all .15s;
+}
+.refresh-btn:hover{border-color:var(--blue);color:var(--blue);}
+
+/* TABLE */
+.table-wrap{flex:1;overflow-x:auto;padding:0 28px 28px;}
+table{width:100%;border-collapse:collapse;margin-top:16px;}
+thead tr{background:var(--s2);border-bottom:2px solid var(--r);}
+th{
+  font-family:var(--fm);font-size:9px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--mt);
+  padding:10px 14px;text-align:left;white-space:nowrap;cursor:pointer;
+  user-select:none;transition:color .15s;
+}
+th:hover{color:var(--wt);}
+th.sorted{color:var(--r);}
+tbody tr{
+  border-bottom:1px solid var(--border);
+  transition:background .1s;
+}
+tbody tr:hover{background:var(--s2);}
+td{padding:12px 14px;vertical-align:middle;}
+.td-id{font-family:var(--fm);font-size:10px;color:var(--mt);}
+.td-name{font-weight:600;color:var(--wt);}
+.td-phone{font-family:var(--fm);font-size:12px;color:var(--wt);}
+.td-phone a{color:var(--wt);text-decoration:none;transition:color .15s;}
+.td-phone a:hover{color:var(--r);}
+.td-service{font-size:12px;color:#aaa;}
+.td-car{font-size:11px;color:var(--mt);}
+.td-comment{font-size:11px;color:var(--mt);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.td-date{font-family:var(--fm);font-size:10px;color:var(--mt);white-space:nowrap;}
+
+/* STATUS BADGE */
+.badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--fm);font-size:9px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  padding:4px 8px;border-radius:2px;cursor:pointer;
+  transition:opacity .15s;border:none;background:none;
+}
+.badge:hover{opacity:.8;}
+.badge.new{background:rgba(52,152,219,.15);color:var(--blue);border:1px solid rgba(52,152,219,.3);}
+.badge.called{background:rgba(46,204,113,.12);color:var(--green);border:1px solid rgba(46,204,113,.3);}
+.badge.spam{background:rgba(231,76,60,.12);color:var(--red);border:1px solid rgba(231,76,60,.3);}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.badge.new .badge-dot{background:var(--blue);}
+.badge.called .badge-dot{background:var(--green);}
+.badge.spam .badge-dot{background:var(--red);}
+
+/* ACTIONS */
+.td-actions{display:flex;gap:6px;}
+.act-btn{
+  font-family:var(--fm);font-size:8px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;padding:5px 8px;border:1px solid var(--border);
+  background:transparent;color:var(--mt);cursor:pointer;transition:all .15s;
+  white-space:nowrap;
+}
+.act-btn:hover{border-color:var(--r);color:var(--r);}
+.act-btn.del:hover{border-color:var(--red);color:var(--red);}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 0;}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+.empty-text{font-family:var(--fm);font-size:11px;letter-spacing:2px;color:var(--mt);text-transform:uppercase;}
+
+/* LOADING */
+.loading{text-align:center;padding:48px;font-family:var(--fm);font-size:10px;letter-spacing:3px;color:var(--mt);text-transform:uppercase;}
+
+/* MODAL (просмотр заявки) */
+#modal-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:20px;
+}
+#modal-overlay.open{display:flex;}
+#modal-box{
+  background:var(--s1);border:1px solid var(--border);border-top:3px solid var(--r);
+  width:100%;max-width:520px;padding:28px;position:relative;
+}
+#modal-close{
+  position:absolute;top:12px;right:14px;background:none;border:none;
+  color:var(--mt);font-size:18px;cursor:pointer;transition:color .15s;
+}
+#modal-close:hover{color:var(--r);}
+.modal-title{font-family:var(--fm);font-size:13px;font-weight:700;letter-spacing:2px;color:var(--r);text-transform:uppercase;margin-bottom:20px;}
+.modal-row{display:flex;gap:12px;margin-bottom:12px;}
+.modal-field{flex:1;}
+.modal-field-label{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mt);margin-bottom:4px;}
+.modal-field-val{font-size:13px;color:var(--wt);line-height:1.5;}
+.modal-field-val a{color:var(--r);text-decoration:none;}
+.modal-divider{height:1px;background:var(--border);margin:16px 0;}
+.modal-status-row{display:flex;gap:8px;margin-top:16px;}
+.modal-status-btn{
+  flex:1;font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;padding:10px;border:1px solid var(--border);
+  background:transparent;color:var(--mt);cursor:pointer;transition:all .15s;
+}
+.modal-status-btn.active-new{border-color:var(--blue);color:var(--blue);background:rgba(52,152,219,.1);}
+.modal-status-btn.active-called{border-color:var(--green);color:var(--green);background:rgba(46,204,113,.1);}
+.modal-status-btn.active-spam{border-color:var(--red);color:var(--red);background:rgba(231,76,60,.1);}
+.modal-status-btn:hover{border-color:var(--r);color:var(--r);}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--s2);border:1px solid var(--border);border-left:3px solid var(--green);
+  padding:10px 20px;font-family:var(--fm);font-size:10px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--wt);z-index:999;
+  opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;}
+
+@media(max-width:900px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .topbar{padding:0 16px;}
+  .toolbar{padding:12px 16px;}
+  .table-wrap{padding:0 16px 24px;}
+}
+@media(max-width:600px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .td-car,.td-comment{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">МАСТЕР<span>КЛЮЧЕЙ</span></div>
+    <div class="login-sub">Панель администратора</div>
+    <label class="login-label">Пароль</label>
+    <input class="login-input" type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">ВОЙТИ</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-logo">МАСТЕР<span>КЛЮЧЕЙ</span> <span style="color:var(--mt);font-size:11px;margin-left:8px;">/ ЗАЯВКИ</span></div>
+    <div class="topbar-right">
+      <span class="topbar-tag" id="topbar-time"></span>
+      <button class="topbar-logout" onclick="logout()">Выйти</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-val" id="st-total">—</div>
+      <div class="stat-lbl">Всего заявок</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val green" id="st-new">—</div>
+      <div class="stat-lbl">Новые</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val orange" id="st-called">—</div>
+      <div class="stat-lbl">Позвонили</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val red-col" id="st-spam">—</div>
+      <div class="stat-lbl">Спам</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Поиск по имени, телефону, услуге..." oninput="renderTable()">
+    </div>
+    <button class="filter-btn active" onclick="setFilter('all',this)">Все</button>
+    <button class="filter-btn" onclick="setFilter('new',this)">Новые</button>
+    <button class="filter-btn" onclick="setFilter('called',this)">Позвонили</button>
+    <button class="filter-btn" onclick="setFilter('spam',this)">Спам</button>
+    <button class="refresh-btn" onclick="loadLeads()">↻ Обновить</button>
+    <button class="csv-btn" onclick="exportCSV()">⬇ CSV</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table id="leads-table">
+      <thead>
+        <tr>
+          <th onclick="sortBy('id')" id="th-id">#</th>
+          <th onclick="sortBy('full_name')" id="th-full_name">Имя</th>
+          <th onclick="sortBy('phone')" id="th-phone">Телефон</th>
+          <th onclick="sortBy('service')" id="th-service">Услуга</th>
+          <th class="td-car" onclick="sortBy('car_model')" id="th-car_model">Авто / модель</th>
+          <th class="td-comment">Комментарий</th>
+          <th onclick="sortBy('created_at')" id="th-created_at" class="sorted">Дата ↓</th>
+          <th onclick="sortBy('status')" id="th-status">Статус</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody id="leads-body"></tbody>
+    </table>
+    <div id="table-msg" class="loading">Загрузка...</div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Заявка #<span id="m-id"></span></div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <div class="modal-field-label">ФИО</div>
+        <div class="modal-field-val" id="m-name"></div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-field-label">Телефон</div>
+        <div class="modal-field-val" id="m-phone"></div>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <div class="modal-field-label">Услуга</div>
+        <div class="modal-field-val" id="m-service"></div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-field-label">Авто / модель</div>
+        <div class="modal-field-val" id="m-car"></div>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <div class="modal-field-label">Комментарий</div>
+        <div class="modal-field-val" id="m-comment"></div>
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <div class="modal-field-label">Дата заявки</div>
+        <div class="modal-field-val" id="m-date"></div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-field-label">IP-адрес</div>
+        <div class="modal-field-val" id="m-ip"></div>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-field-label">Изменить статус</div>
+    <div class="modal-status-row">
+      <button class="modal-status-btn" id="ms-new"    onclick="setModalStatus('new')">🔵 Новая</button>
+      <button class="modal-status-btn" id="ms-called" onclick="setModalStatus('called')">🟢 Позвонил</button>
+      <button class="modal-status-btn" id="ms-spam"   onclick="setModalStatus('spam')">🔴 Спам</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   НАСТРОЙКИ — измени под свой сервер
+   ================================================================ */
+var API_URL    = '/api';          // Базовый URL бэкенда
+var ADMIN_PASS = 'ADMIN_PASSWORD'; // Пароль — ЗАМЕНИ на свой!
+/* ================================================================ */
+
+var allLeads   = [];
+var filterMode = 'all';
+var sortField  = 'created_at';
+var sortAsc    = false;
+var currentLead = null;
+var token      = '';
+
+/* ── AUTH ── */
+function doLogin(){
+  var pass = document.getElementById('login-pass').value;
+  if(pass === ADMIN_PASS){
+    token = pass;
+    sessionStorage.setItem('admin_token', pass);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    loadLeads();
+    startClock();
+  } else {
+    document.getElementById('login-err').textContent = '✗ Неверный пароль';
+    document.getElementById('login-pass').value = '';
+  }
+}
+function logout(){
+  sessionStorage.removeItem('admin_token');
+  token = '';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').textContent = '';
+}
+
+/* Auto-login if session active */
+(function(){
+  var t = sessionStorage.getItem('admin_token');
+  if(t === ADMIN_PASS){
+    token = t;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    loadLeads();
+    startClock();
+  }
+})();
+
+/* ── CLOCK ── */
+function startClock(){
+  function tick(){
+    var now = new Date();
+    document.getElementById('topbar-time').textContent =
+      now.toLocaleDateString('ru-RU') + '  ' +
+      now.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+/* ── LOAD LEADS ── */
+async function loadLeads(){
+  document.getElementById('table-msg').textContent = 'Загрузка...';
+  document.getElementById('table-msg').style.display = 'block';
+  document.getElementById('leads-body').innerHTML = '';
+  try{
+    /* ── ДЕМО-ДАННЫЕ (пока нет сервера) ──
+       Когда подключишь бэкенд, замени этот блок на:
+       const res = await fetch(API_URL+'/leads?pass='+token);
+       allLeads = await res.json();
+    ─────────────────────────────────── */
+    allLeads = getDemoLeads();
+    /* ─────────────────────────────────── */
+    updateStats();
+    renderTable();
+    document.getElementById('table-msg').style.display = 'none';
+  }catch(e){
+    document.getElementById('table-msg').textContent = 'Ошибка загрузки: ' + e.message;
+  }
+}
+
+/* ── DEMO DATA (убери когда подключишь реальный API) ── */
+function getDemoLeads(){
+  return [
+    {id:1,full_name:'Иванов Иван Иванович',phone:'+7 (987) 444-98-00',service:'Автомобильный ключ',car_model:'Toyota Camry 2020',comment:'Потерял ключ, срочно нужен дубликат',created_at:'2026-05-14T09:12:00Z',status:'new',ip_address:'95.33.12.45'},
+    {id:2,full_name:'Петрова Анна',phone:'+7 (987) 123-45-67',service:'Ключ-домофон / карта',car_model:'',comment:'Нужна копия таблетки домофона',created_at:'2026-05-14T10:45:00Z',status:'called',ip_address:'91.14.55.12'},
+    {id:3,full_name:'Сидоров Алексей Петрович',phone:'+7 (963) 555-11-22',service:'Домашний ключ',car_model:'',comment:'',created_at:'2026-05-13T15:30:00Z',status:'new',ip_address:'188.43.22.11'},
+    {id:4,full_name:'Козлова Марина',phone:'+7 (917) 888-99-00',service:'Диагностика',car_model:'BMW X5 2019',comment:'Горит чек, хочу диагностику',created_at:'2026-05-13T11:00:00Z',status:'called',ip_address:'77.232.14.5'},
+    {id:5,full_name:'Новиков',phone:'+7 (900) 000-00-00',service:'Другое',car_model:'',comment:'тест тест тест 123',created_at:'2026-05-12T08:00:00Z',status:'spam',ip_address:'1.2.3.4'},
+    {id:6,full_name:'Захарова Елена Сергеевна',phone:'+7 (987) 321-00-55',service:'Ключ для катера / яхты',car_model:'Yamaha F60',comment:'Сломался ключ зажигания, нужен срочно',created_at:'2026-05-12T14:20:00Z',status:'new',ip_address:'95.100.44.2'},
+    {id:7,full_name:'Морозов Дмитрий',phone:'+7 (927) 444-22-11',service:'Ключ для мотоцикла',car_model:'Honda CB500 2021',comment:'',created_at:'2026-05-11T16:00:00Z',status:'called',ip_address:'195.5.33.90'},
+  ];
+}
+
+/* ── STATS ── */
+function updateStats(){
+  document.getElementById('st-total').textContent  = allLeads.length;
+  document.getElementById('st-new').textContent    = allLeads.filter(l=>l.status==='new').length;
+  document.getElementById('st-called').textContent = allLeads.filter(l=>l.status==='called').length;
+  document.getElementById('st-spam').textContent   = allLeads.filter(l=>l.status==='spam').length;
+}
+
+/* ── FILTER + SORT + SEARCH ── */
+function setFilter(mode, btn){
+  filterMode = mode;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderTable();
+}
+
+function sortBy(field){
+  if(sortField===field){ sortAsc=!sortAsc; }
+  else { sortField=field; sortAsc=true; }
+  document.querySelectorAll('th').forEach(t=>t.classList.remove('sorted'));
+  var th = document.getElementById('th-'+field);
+  if(th){ th.classList.add('sorted'); th.textContent = th.textContent.replace(/ [↑↓]$/,'') + (sortAsc?' ↑':' ↓'); }
+  renderTable();
+}
+
+function renderTable(){
+  var q = document.getElementById('search-input').value.toLowerCase();
+  var data = allLeads.filter(l=>{
+    if(filterMode!=='all' && l.status!==filterMode) return false;
+    if(!q) return true;
+    return (l.full_name||'').toLowerCase().includes(q)
+        || (l.phone||'').includes(q)
+        || (l.service||'').toLowerCase().includes(q)
+        || (l.car_model||'').toLowerCase().includes(q)
+        || (l.comment||'').toLowerCase().includes(q);
+  });
+  data.sort(function(a,b){
+    var av=a[sortField]||'', bv=b[sortField]||'';
+    if(av<bv) return sortAsc?-1:1;
+    if(av>bv) return sortAsc?1:-1;
+    return 0;
+  });
+  var tbody = document.getElementById('leads-body');
+  if(data.length===0){
+    tbody.innerHTML='';
+    document.getElementById('table-msg').style.display='block';
+    document.getElementById('table-msg').innerHTML='<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Заявок не найдено</div></div>';
+    return;
+  }
+  document.getElementById('table-msg').style.display='none';
+  tbody.innerHTML = data.map(function(l){
+    var d = new Date(l.created_at);
+    var ds = d.toLocaleDateString('ru-RU')+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+    var statusLabels = {new:'Новая',called:'Позвонил',spam:'Спам'};
+    var st = l.status||'new';
+    return '<tr onclick="openModal('+l.id+')" style="cursor:pointer;">'
+      +'<td class="td-id">#'+l.id+'</td>'
+      +'<td class="td-name">'+esc(l.full_name)+'</td>'
+      +'<td class="td-phone"><a href="tel:'+l.phone+'" onclick="event.stopPropagation()">'+esc(l.phone)+'</a></td>'
+      +'<td class="td-service">'+esc(l.service||'—')+'</td>'
+      +'<td class="td-car">'+esc(l.car_model||'—')+'</td>'
+      +'<td class="td-comment" title="'+esc(l.comment)+'">'+esc(l.comment||'—')+'</td>'
+      +'<td class="td-date">'+ds+'</td>'
+      +'<td><button class="badge '+st+'" onclick="cycleStatus(event,'+l.id+')">'
+        +'<span class="badge-dot"></span>'+statusLabels[st]+'</button></td>'
+      +'<td><div class="td-actions">'
+        +'<button class="act-btn" onclick="openModal('+l.id+');event.stopPropagation()">Открыть</button>'
+        +'<button class="act-btn del" onclick="deleteLead('+l.id+');event.stopPropagation()">Удалить</button>'
+      +'</div></td>'
+      +'</tr>';
+  }).join('');
+}
+
+/* ── CYCLE STATUS ── */
+function cycleStatus(e,id){
+  e.stopPropagation();
+  var lead = allLeads.find(l=>l.id===id);
+  if(!lead) return;
+  var cycle = {new:'called',called:'spam',spam:'new'};
+  lead.status = cycle[lead.status]||'new';
+  updateStats(); renderTable();
+  /* Отправить на сервер:
+  fetch(API_URL+'/leads/'+id+'/status', {
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({status:lead.status, pass:token})
+  }); */
+  toast('Статус изменён');
+}
+
+/* ── DELETE ── */
+function deleteLead(id){
+  if(!confirm('Удалить заявку #'+id+'?')) return;
+  allLeads = allLeads.filter(l=>l.id!==id);
+  updateStats(); renderTable();
+  /* fetch(API_URL+'/leads/'+id+'?pass='+token, {method:'DELETE'}); */
+  toast('Заявка удалена');
+}
+
+/* ── MODAL ── */
+function openModal(id){
+  var l = allLeads.find(l=>l.id===id);
+  if(!l) return;
+  currentLead = l;
+  document.getElementById('m-id').textContent      = l.id;
+  document.getElementById('m-name').textContent    = l.full_name||'—';
+  document.getElementById('m-phone').innerHTML     = l.phone?'<a href="tel:'+l.phone+'">'+esc(l.phone)+'</a>':'—';
+  document.getElementById('m-service').textContent = l.service||'—';
+  document.getElementById('m-car').textContent     = l.car_model||'—';
+  document.getElementById('m-comment').textContent = l.comment||'—';
+  document.getElementById('m-ip').textContent      = l.ip_address||'—';
+  var d = new Date(l.created_at);
+  document.getElementById('m-date').textContent    = d.toLocaleString('ru-RU');
+  updateModalStatus(l.status||'new');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal-overlay').classList.remove('open');
+  currentLead=null;
+}
+function updateModalStatus(st){
+  ['new','called','spam'].forEach(function(s){
+    document.getElementById('ms-'+s).className = 'modal-status-btn' + (s===st?' active-'+s:'');
+  });
+}
+function setModalStatus(st){
+  if(!currentLead) return;
+  currentLead.status = st;
+  updateModalStatus(st);
+  updateStats(); renderTable();
+  /* fetch(API_URL+'/leads/'+currentLead.id+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:st,pass:token})}); */
+  toast('Статус изменён → '+{new:'Новая',called:'Позвонил',spam:'Спам'}[st]);
+}
+document.getElementById('modal-overlay').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+
+/* ── EXPORT CSV ── */
+function exportCSV(){
+  var data = allLeads.filter(l=> filterMode==='all' || l.status===filterMode);
+  var headers = ['ID','Имя','Телефон','Услуга','Авто/Модель','Комментарий','Дата','Статус'];
+  var rows = data.map(l=>[
+    l.id,
+    '"'+(l.full_name||'').replace(/"/g,'""')+'"',
+    '"'+(l.phone||'')+'"',
+    '"'+(l.service||'').replace(/"/g,'""')+'"',
+    '"'+(l.car_model||'').replace(/"/g,'""')+'"',
+    '"'+(l.comment||'').replace(/"/g,'""')+'"',
+    new Date(l.created_at).toLocaleString('ru-RU'),
+    l.status
+  ].join(','));
+  var csv = '\uFEFF'+headers.join(',')+'\n'+rows.join('\n');
+  var blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'leads-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('CSV скачан — '+data.length+' записей');
+}
+
+/* ── HELPERS ── */
+function esc(s){ var d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._to); t._to=setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
