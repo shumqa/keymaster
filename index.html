@@ -36,9 +36,6 @@ body.dark .why-list{background:rgba(255,255,255,0.04)!important}
 body.dark .why-item{background:#050505!important}
 body.dark .why-item:hover{background:#0F0F0F!important}
 body.dark .ci{border-color:rgba(255,255,255,0.05)!important;color:#F0F0F0!important}
-body.dark .fgroup input,body.dark .fgroup textarea,body.dark .fgroup select{background:#111!important;border-color:rgba(255,255,255,0.08)!important;border-bottom-color:rgba(255,255,255,0.2)!important;color:#F0F0F0!important}
-body.dark .fgroup input:focus,body.dark .fgroup textarea:focus{background:#1a1a1a!important}
-body.dark .fgroup select option{background:#111!important;color:#F0F0F0!important}
 body.dark .form-info-title{color:#F0F0F0!important}
 body.dark .form-info-text{color:#888!important}
 body.dark .ci-lbl{color:#666!important}
@@ -52,8 +49,6 @@ body.dark .why-t{color:#F0F0F0!important}
 body.dark .why-d{color:#666!important}
 body.dark .card-phone-label{color:#666!important}
 body.dark .add-ico{border-color:rgba(255,26,26,0.2)!important}
-body.dark .success-box{background:rgba(255,26,26,.05)!important;border-color:rgba(255,26,26,.3)!important}
-body.dark .success-box h3{color:var(--r)!important}
 body.dark .form-phone-big{background:rgba(255,26,26,0.08)!important;border-color:rgba(255,26,26,0.2)!important}
 
 /* TOGGLE BUTTON */
@@ -300,6 +295,22 @@ body.dark nav{background:rgba(5,5,5,0.97)!important}
 .form-outer{padding:80px 48px}
 .form-inner{max-width:1200px;margin:0 auto}
 .form-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+
+/* CONTACTS / SCHEDULE — центрированный блок вместо формы */
+.sched-outer{padding:80px 48px}
+.sched-inner{max-width:640px;margin:0 auto;text-align:center;}
+.sched-phone-block{
+  background:rgba(255,26,26,0.06);border:1px solid rgba(255,26,26,0.2);
+  padding:24px 28px;margin:32px auto;max-width:400px;text-align:center;
+}
+.sched-phone-num{
+  font-family:var(--fd);font-size:clamp(26px,4vw,40px);color:var(--r);
+  letter-spacing:2px;line-height:1;text-decoration:none;display:block;margin-top:6px;
+  transition:opacity .15s;
+}
+.sched-phone-num:hover{opacity:.8;}
+.sched-grid{display:flex;flex-direction:column;gap:0;max-width:460px;margin:0 auto;}
+.sched-ci{justify-content:center;text-align:left;}
 .form-info-title{font-family:var(--fd);font-size:clamp(32px,4vw,52px);line-height:.95;color:var(--wt);margin-bottom:16px}
 .form-info-title span{color:var(--r)}
 .form-info-text{font-size:13px;color:var(--mt);line-height:1.8;margin-bottom:28px}
@@ -315,34 +326,6 @@ body.dark nav{background:rgba(5,5,5,0.97)!important}
 .ci{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(0,0,0,0.07);font-size:13px;color:#1A1A1A}
 .ci-lbl{font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;color:var(--mt);text-transform:uppercase;width:76px;flex-shrink:0}
 
-.fgroup{margin-bottom:14px}
-.fgroup label{display:block;font-family:var(--fm);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mt);margin-bottom:7px}
-.fgroup input,.fgroup textarea,.fgroup select{
-  width:100%;background:#F0EFED;border:1px solid rgba(0,0,0,0.12);
-  border-bottom:1px solid rgba(0,0,0,0.25);
-  color:#1A1A1A;padding:13px 15px;
-  font-family:var(--fb);font-size:14px;outline:none;
-  transition:border-color .2s;border-radius:0;
-}
-.fgroup input:focus,.fgroup textarea:focus{border-color:var(--r);background:#fff}
-.fgroup textarea{resize:vertical;min-height:80px}
-.fgroup select option{background:#fff;color:#1A1A1A}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fcheck{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.fcheck input[type="checkbox"]{width:15px;height:15px;margin-top:2px;flex-shrink:0;accent-color:var(--r);cursor:pointer}
-.fcheck label{font-size:11px;color:var(--mt);line-height:1.5;cursor:pointer}
-.fcheck label a{color:var(--r);text-decoration:none}
-.fsubmit{
-  width:100%;background:var(--r);color:#fff;border:none;
-  padding:16px;font-family:var(--fm);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  cursor:pointer;transition:background .15s;margin-top:6px;
-}
-.fsubmit:hover{background:var(--r2)}
-.fnote{font-size:10px;color:rgba(102,102,102,.6);text-align:center;margin-top:8px;font-family:var(--fm)}
-.field-error{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#E01010;letter-spacing:1px;padding:6px 10px;border:1px solid rgba(224,16,16,0.35);background:rgba(224,16,16,0.06);margin-top:5px;}
-.success-box{display:none;text-align:center;padding:36px;border:1px solid rgba(255,26,26,.3);background:rgba(255,26,26,.05)}
-.success-box h3{font-family:var(--fd);font-size:32px;color:var(--r);margin-bottom:8px}
-.success-box p{font-size:13px;color:var(--mt)}
 
 footer{background:#1A1A1A;border-top:3px solid var(--r);padding:44px 48px 24px}
 .footer-inner{max-width:1200px;margin:0 auto}
@@ -471,7 +454,6 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
   .form-outer{padding:56px 20px}
   footer{padding:36px 20px 20px}
   .keys-grid{grid-template-columns:1fr}
-  .frow{grid-template-columns:1fr}
   .phone-banner{padding:32px 20px}
   .sec-hd-right{text-align:left}
 }
@@ -490,12 +472,10 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
     <div class="nlinks">
       <a href="#services">Услуги</a>
       <a href="#why">О нас</a>
-      <a href="#form">Заявка</a>
     </div>
     <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему"><span class="icon-sun">☀️</span><span class="icon-moon">🌙</span></button>
   </div>
   <div class="nav-right">
-    <button class="ncta" onclick="document.getElementById('form').scrollIntoView({behavior:'smooth'})">Записаться</button>
   </div>
 </nav>
 
@@ -519,7 +499,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
         +7 (987) 444-98-48
       </div>
       <div class="hero-actions">
-        <a class="btn-red" href="#form">Оставить заявку</a>
+        <a class="btn-red" href="tel:+79874449848">Позвонить сейчас</a>
         <a class="btn-ghost" href="#services">Наши услуги</a>
       </div>
     </div>
@@ -592,6 +572,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
           <span class="key-tag">Чип</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
       <div class="key-card" onclick="openCatalog('home')" style="cursor:pointer;">
         <span class="key-ico">🏠</span>
@@ -604,6 +585,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
           <span class="key-tag">Ящик</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
       <div class="key-card" onclick="openCatalog('dom')" style="cursor:pointer;">
         <span class="key-ico">📟</span>
@@ -616,6 +598,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
           <span class="key-tag">Брелок</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
       <div class="key-card" onclick="openCatalog('boat')" style="cursor:pointer;">
         <span class="key-ico">⛵</span>
@@ -628,6 +611,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
           <span class="key-tag">Все марки</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
       <div class="key-card" onclick="openCatalog('moto')" style="cursor:pointer;">
         <span class="key-ico">🏍️</span>
@@ -640,6 +624,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
           <span class="key-tag">ATV</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
       <div class="key-card" onclick="openCatalog('spec')" style="cursor:pointer;">
         <span class="key-ico">🚜</span>
@@ -651,6 +636,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
           <span class="key-tag">Погрузчик</span>
           <span class="key-tag">Выезд</span>
         </div>
+        <div style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--r);display:flex;align-items:center;gap:6px;">Смотреть каталог <span style="font-size:11px;">→</span></div>
       </div>
     </div>
 
@@ -715,71 +701,25 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
   </div>
 </div>
 
-<!-- FORM -->
-<section id="form">
-  <div class="form-outer">
-    <div class="form-inner">
-      <div class="form-layout">
-        <div>
-          <div class="sec-num">// 03 — Заявка</div>
-          <div class="form-info-title">ЗАПИШИТЕСЬ<br><span>СЕЙЧАС</span></div>
-          <p class="form-info-text">Оставьте заявку — перезвоним в течение 15 минут и согласуем удобное время или выезд.</p>
+<!-- CONTACTS / SCHEDULE -->
+<section id="contacts">
+  <div class="sched-outer">
+    <div class="sched-inner">
+      <div class="sec-num" style="text-align:center;">// 03 — Контакты</div>
+      <div class="form-info-title" style="text-align:center;">СВЯЖИТЕСЬ<br><span>С НАМИ</span></div>
+      <p class="form-info-text" style="text-align:center;max-width:480px;margin-left:auto;margin-right:auto;">Звоните напрямую — ответим быстро и согласуем удобное время или выезд.</p>
 
-          <div class="form-phone-big">
-            <div class="form-phone-big-label">Или позвоните напрямую</div>
-            <div class="form-phone-big-num">+7 (987) 444-98-48</div>
-          </div>
+      <div class="sched-phone-block">
+        <div class="form-phone-big-label">Позвоните напрямую</div>
+        <a href="tel:+79874449848" class="sched-phone-num">+7 (987) 444-98-48</a>
+      </div>
 
-          <div class="ci"><span class="ci-lbl">Адрес</span>г. Самара, ул. Осетинская, 2</div>
-          <div class="ci"><span class="ci-lbl">Телефон</span>+7 (987) 444-98-48</div>
-          <div class="ci"><span class="ci-lbl">Вт–Сб</span>10:00 – 20:00</div>
-          <div class="ci"><span class="ci-lbl">Воскресенье</span>10:00 – 18:00</div>
-          <div class="ci"><span class="ci-lbl">Понедельник</span>Выходной</div>
-          <div class="ci"><span class="ci-lbl">Выезд</span>По городу и области</div>
-        </div>
-        <div>
-          <div id="form-container">
-            <div class="frow">
-              <div class="fgroup"><label>ФИО *</label><input type="text" id="f-name" placeholder="Иванов Иван" oninput="clearErr('name-error',this)"><div id="name-error" class="field-error" style="display:none">⚠ Введите имя (только буквы)</div></div>
-              <div class="fgroup"><label>Телефон *</label><input type="tel" id="f-phone" placeholder="+7 (___) ___-__-__" oninput="clearErr('phone-error',this)"><div id="phone-error" class="field-error" style="display:none">⚠ Введите номер телефона</div></div>
-            </div>
-            <div class="fgroup">
-              <label>Тип ключа / услуга *</label>
-              <select id="f-service" onchange="clearErr('service-error',this)">
-                <option value="">— выберите тип —</option>
-                <option>Автомобильный ключ</option>
-                <option>Домашний ключ</option>
-                <option>Ключ-домофон / карта</option>
-                <option>Ключ для катера / яхты</option>
-                <option>Ключ для мотоцикла / скутера</option>
-                <option>Ключ для спецтехники</option>
-                <option>Вскрытие замка</option>
-                <option>Диагностика</option>
-                <option>Другое</option>
-              </select>
-              <div id="service-error" class="field-error" style="display:none">⚠ Выберите тип услуги</div>
-            </div>
-            <div class="fgroup"><label>Марка / модель (если авто, катер и т.д.)</label><input type="text" id="f-car" placeholder="Например: Toyota Camry 2020"></div>
-            <div class="fgroup"><label>Комментарий</label><textarea id="f-comment" placeholder="Опишите ситуацию..."></textarea></div>
-            <div class="fcheck" id="c1-wrap">
-              <input type="checkbox" id="c1" onchange="clearConsentError()">
-              <label for="c1">Согласен на <a href="privacy.html" target="_blank">обработку персональных данных</a> согласно ФЗ-152 и <a href="privacy.html" target="_blank">политике конфиденциальности</a> *</label>
-            </div>
-            <div id="consent-error" style="display:none;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#E01010;letter-spacing:1px;padding:8px 12px;border:1px solid rgba(224,16,16,0.4);background:rgba(224,16,16,0.06);margin-bottom:10px;">
-              ⚠ Необходимо подтвердить согласие на обработку данных
-            </div>
-            <div class="fcheck">
-              <input type="checkbox" id="c2">
-              <label for="c2">Согласен получать информацию об акциях (ФЗ-38)</label>
-            </div>
-            <button class="fsubmit" onclick="handleSubmit()">Отправить заявку</button>
-            <p class="fnote">* Обязательные поля · Данные защищены по ФЗ-152</p>
-          </div>
-          <div class="success-box" id="success-box">
-            <h3>ПРИНЯТО!</h3>
-            <p>Перезвоним на +7 (987) 444-98-48 в течение 15 минут. Спасибо!</p>
-          </div>
-        </div>
+      <div class="sched-grid">
+        <div class="ci sched-ci"><span class="ci-lbl">Адрес</span>г. Самара, ул. Осетинская, 2</div>
+        <div class="ci sched-ci"><span class="ci-lbl">Пн–Пт</span>10:00 – 20:00</div>
+        <div class="ci sched-ci"><span class="ci-lbl">Суббота</span>10:00 – 18:00</div>
+        <div class="ci sched-ci"><span class="ci-lbl">Воскресенье</span>По предварительной договорённости</div>
+        <div class="ci sched-ci"><span class="ci-lbl">Выезд</span>По городу и области</div>
       </div>
     </div>
   </div>
@@ -793,6 +733,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
     <div style="overflow:hidden;border:2px solid rgba(255,26,26,0.3);">
       <iframe src="https://yandex.ru/map-widget/v1/?text=%D0%A1%D0%B0%D0%BC%D0%B0%D1%80%D0%B0%2C+%D1%83%D0%BB%D0%B8%D1%86%D0%B0+%D0%9E%D1%81%D0%B5%D1%82%D0%B8%D0%BD%D1%81%D0%BA%D0%B0%D1%8F%2C+2&z=17&l=map" width="100%" height="400" frameborder="0" allowfullscreen="true" style="display:block;filter:hue-rotate(0deg)"></iframe>
     </div>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#666;margin-top:10px;letter-spacing:1px;">* Приезжать по предварительному согласованию с мастером</p>
   </div>
 </div>
 
@@ -831,105 +772,7 @@ body.dark #cat-footer{border-color:rgba(255,255,255,0.06)}
   </div>
 </footer>
 
-<script>
-/* ---- helpers ---- */
-function showErr(id, el){
-  var e=document.getElementById(id);
-  if(e){e.style.display='block';}
-  if(el){el.style.borderColor='#E01010';}
-}
-function clearErr(id, el){
-  var e=document.getElementById(id);
-  if(e){e.style.display='none';}
-  if(el){el.style.borderColor='';}
-}
 
-/* ---- consent ---- */
-function clearConsentError(){
-  clearErr('consent-error', null);
-  document.getElementById('c1-wrap').style.outline='none';
-}
-
-/* ---- submit ---- */
-function handleSubmit(){
-  var nameEl=document.getElementById('f-name');
-  var phoneEl=document.getElementById('f-phone');
-  var svcEl=document.getElementById('f-service');
-  var c1=document.getElementById('c1');
-
-  var n=nameEl.value.trim();
-  var p=phoneEl.value.trim();
-  var svc=svcEl.value;
-  var ok=true;
-
-  /* ФИО */
-  if(!n){showErr('name-error',nameEl);ok=false;}
-  /* телефон: нужно минимум 10 цифр */
-  var digits=p.replace(/\D/g,'');
-  if(!p||digits.length<11){showErr('phone-error',phoneEl);ok=false;}
-  /* услуга */
-  if(!svc){showErr('service-error',svcEl);ok=false;}
-  /* согласие */
-  if(!c1.checked){
-    document.getElementById('consent-error').style.display='block';
-    document.getElementById('c1-wrap').style.outline='2px solid #E01010';
-    ok=false;
-  }
-
-  if(!ok){
-    /* прокрутить к первой ошибке */
-    var first=document.querySelector('.field-error[style*="block"], #consent-error[style*="block"]');
-    if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
-
-  document.getElementById('form-container').style.display='none';
-  document.getElementById('success-box').style.display='block';
-}
-
-/* ---- ФИО: только буквы, пробелы, дефис ---- */
-var nm=document.getElementById('f-name');
-if(nm){
-  nm.addEventListener('keydown',function(e){
-    var allowed=['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Home','End',' ','-'];
-    if(allowed.indexOf(e.key)!==-1)return;
-    if(!/^[а-яёА-ЯЁa-zA-Z]$/.test(e.key)){e.preventDefault();}
-  });
-  nm.addEventListener('paste',function(e){
-    e.preventDefault();
-    var t=(e.clipboardData||window.clipboardData).getData('text').replace(/[^а-яёА-ЯЁa-zA-Z\s\-]/g,'');
-    document.execCommand('insertText',false,t);
-  });
-}
-
-/* ---- телефон: только цифры ---- */
-var ph=document.getElementById('f-phone');
-if(ph){
-  ph.addEventListener('keydown',function(e){
-    var allowed=['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Home','End'];
-    if(allowed.indexOf(e.key)!==-1)return;
-    if(!/^\d$/.test(e.key)){e.preventDefault();}
-  });
-  ph.addEventListener('input',function(e){
-    var v=e.target.value.replace(/\D/g,'');
-    if(v.length>0){
-      if(v[0]==='7'||v[0]==='8')v=v.slice(1);
-      var f='+7';
-      if(v.length>0)f+=' ('+v.slice(0,3);
-      if(v.length>=3)f+=') '+v.slice(3,6);
-      if(v.length>=6)f+='-'+v.slice(6,8);
-      if(v.length>=8)f+='-'+v.slice(8,10);
-      e.target.value=f;
-    }
-  });
-  ph.addEventListener('paste',function(e){
-    e.preventDefault();
-    var pasted=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');
-    ph.value=pasted;
-    ph.dispatchEvent(new Event('input'));
-  });
-}
-</script>
 
 <!-- ===== КАТАЛОГ ===== -->
 <div id="cat-overlay">
